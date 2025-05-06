@@ -1,7 +1,9 @@
-import { Link, useActionData } from "react-router-dom"
+import { Link, useActionData, type ActionFunctionArgs } from "react-router-dom"
 import {Form} from 'react-router-dom'
+import { ErrorMessage } from "../components/ErrorMessage"
 
-export const action = async({request}) => {
+
+export const action = async({request}: ActionFunctionArgs) => {
     const data = Object.fromEntries(await request.formData())
     let error = ''
     if(Object.values(data).includes('')){
@@ -17,9 +19,7 @@ export const action = async({request}) => {
 
 export const NewProduct = () => {
 
-    const error = useActionData()
-
-    console.log(error);
+    const error = useActionData() as string
 
     return (
         <>
@@ -32,6 +32,8 @@ export const NewProduct = () => {
                     Volver a productos
                 </Link>
             </div>
+
+            {error && <ErrorMessage>{error}</ErrorMessage>}
             <Form
                 className="mt-10"
                 method="POST"
