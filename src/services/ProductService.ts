@@ -1,6 +1,6 @@
 import { safeParse } from "valibot"
 import axios from "axios"
-import { DraftProductSchema, ProductsSchema } from "../types"
+import { DraftProductSchema, ProductSchema, ProductsSchema, type Product } from "../types"
 
 type ProductData = {
     [k: string]: FormDataEntryValue
@@ -31,6 +31,19 @@ export const getProducts = async() => {
       const url = `${import.meta.env.VITE_API_URL}/api/products`
       const {data} = await axios(url)
       const result = safeParse(ProductsSchema, data.data)
+      if(result.success) {
+        return result.output
+      }
+    } catch (error) {
+        throw new Error('Hubo un error')
+    }
+}
+
+export const getProductById = async(id : Product['id']) => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/api/products/${id}`
+      const {data} = await axios(url)
+      const result = safeParse(ProductSchema, data.data)
       if(result.success) {
         return result.output
       }
